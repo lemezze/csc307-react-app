@@ -12,6 +12,7 @@ app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`);
 });
 
+// List of Users
 const users = { 
     users_list :
     [
@@ -43,15 +44,13 @@ const users = {
     ]
  }
 
- // on localhost browser url, include "/users"
-// app.get('/users', (req, res) => {
-//     res.send(users);
-// });
-
+// GET Users function, name or job, name & job
 app.get('/users', (req, res) => {
     const name = req.query.name;
+    const job = req.query.job;
     // console.log(name);
-    if (name != undefined){
+    if (name != undefined & job != undefined){
+        // Not sure how to implement job
         let result = findUserByName(name);
         result = {users_list: result};
         res.send(result);
@@ -65,6 +64,13 @@ const findUserByName = (name) => {
     return users['users_list'].filter((user) => user['name'] === name); 
 }
 
+const findUserByJob = (job) => { 
+    return users['users_list'].filter((user) => user['job'] === job); 
+}
+
+// create find user name and job
+
+// GET id function
 app.get('/users/:id', (req, res) => {
     const id = req.params['id']; //or req.params.id
     let result = findUserById(id);
@@ -83,6 +89,7 @@ function findUserById(id) {
     //return users['users_list'].filter( (user) => user['id'] === id);
 }
 
+// POST users function (adds users)
 app.post('/users', (req, res) => {
     const userToAdd = req.body;
     addUser(userToAdd);
@@ -92,3 +99,12 @@ app.post('/users', (req, res) => {
 function addUser(user){
     users['users_list'].push(user);
 }
+
+// DELETE users function
+app.delete('/users/:id', (req, res) => {
+    const id = req.params['id'];
+    console.log(id);
+    users['users_list'] = users['users_list'].filter( (user) => user['id'] !== id);
+    res.status(204).end();
+    // if user not in table, add 404 
+});
