@@ -44,7 +44,7 @@ const users = {
     ]
  }
 
-// GET Users function, name or job, name & job
+// GET Users function, name or job, name & job (3 cases total)
 app.get('/users', (req, res) => {
     const name = req.query.name;
     const job = req.query.job;
@@ -106,5 +106,5 @@ app.delete('/users/:id', (req, res) => {
     console.log(id);
     users['users_list'] = users['users_list'].filter( (user) => user['id'] !== id);
     res.status(204).end();
-    // if user not in table, add 404 
+    // if user not in table, return 404 msg 
 });
