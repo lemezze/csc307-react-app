@@ -111,14 +111,10 @@ function findUserById(id) {
 // POST users function (adds users)
 app.post('/users', (req, res) => {
     const userToAdd = req.body;
-    addUser(userToAdd);
-    res.status(201).end();
+    userToAdd.id = Math.floor(Math.random() * 5).toString();
+    users['users_list'].push(userToAdd);
+    res.status(201).send(userToAdd).end();
 });
-
-
-function addUser(user){
-    users['users_list'].push(user);
-}
 
 
 // DELETE users function
@@ -128,7 +124,7 @@ app.delete('/users/:id', (req, res) => {
     users['users_list'] = users['users_list'].filter( (user) => user['id'] !== id);
     // if user not in table, return 404 msg 
     if (users['users_list'] === undefined || users['users_list'].length == 0)
-        res.status(404).send('User ID not found.');
+        res.status(404).send('resource not found.');
     else {
         res.status(204).end();
     }

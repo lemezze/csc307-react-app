@@ -13,18 +13,24 @@ function MyApp() {
      });
  }, [] );
 
-function removeOneCharacter (index) {
+ async function removeOneCharacter (index) {
   const updated = characters.filter((character, i) => {
       return i !== index
     });
-    setCharacters(updated);
+
+  setCharacters(updated);
+
+  try {
+    const response = await axios.delete(`http://localhost:8000/users/${characters[index].id}`);
+    return response;
   }
+  catch (error) {
+        console.log(error); 
+        return false;
+  }
+ }
 
-  // function updateList(person) {
-  //   setCharacters([...characters, person]);
-  // }
-
-  function updateList(person) { 
+ function updateList(person) { 
     makePostCall(person).then( result => {
     if (result && result.status === 200)
        setCharacters([...characters, person] );
@@ -38,7 +44,7 @@ function removeOneCharacter (index) {
     </div>
   )
 
-  async function fetchAll(){
+ async function fetchAll(){
     try {
        const response = await axios.get('http://localhost:8000/users');
        return response.data.users_list;     
